@@ -93,9 +93,9 @@ export default {
       },
       read: {
         ref: "article-num-card",
-        title: "近日各分区阅读量",
+        title: "近日各分区新投稿阅读量",
         chart: {
-          title: "近日各分区阅读量趋势图",
+          title: "近日各分区新投稿阅读量趋势图",
           ref: "article-num-chart"
         }
       }
@@ -159,7 +159,6 @@ export default {
           return result;
         })
       );
-      console.log(dataSource);
       let option = {
         title: {
           title: this.access.chart.title
@@ -197,19 +196,27 @@ export default {
         isGroupByPart: true,
         isGroupByPublishTime: true,
         publishTimeStart: new Date(startTime),
-        publishTimeEnd: now
+        publishTimeEnd: now,
+        dateFormat: "%m-%d"
       });
       let series = legendData.map(legend => {
         return {
           name: legend,
           type: "line",
           stack: "总量",
+          smooth: true,
           areaStyle: {},
-          data: data
-            .filter(({ part }) => {
-              return part == legend;
-            })
-            .map(a => a.count)
+          data: xData.map(date => {
+            for (const item of data) {
+              if (
+                ARTICLE_PART_MAP[item.part] == legend &&
+                item.publishTime == date
+              ) {
+                return item.count;
+              }
+            }
+            return 0;
+          })
         };
       });
       let option = {
@@ -267,19 +274,28 @@ export default {
         isGroupByPart: true,
         isGroupByPublishTime: true,
         publishTimeStart: new Date(startTime),
-        publishTimeEnd: now
+        publishTimeEnd: now,
+        dateFormat: "%m-%d"
       });
+      console.log(data);
       let series = legendData.map(legend => {
         return {
           name: legend,
           type: "line",
           stack: "总量",
+          smooth: true,
           areaStyle: {},
-          data: data
-            .filter(({ part }) => {
-              return part == legend;
-            })
-            .map(a => a.readNum)
+          data: xData.map(date => {
+            for (const item of data) {
+              if (
+                ARTICLE_PART_MAP[item.part] == legend &&
+                item.publishTime == date
+              ) {
+                return item.readNum;
+              }
+            }
+            return 0;
+          })
         };
       });
       let option = {
