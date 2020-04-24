@@ -2,8 +2,7 @@
   <div>
     <Card style="margin:0;">
       <h2 style="margin-bottom:24px;">
-        <Icon type="md-person"></Icon>
-        用户管理
+        <Icon type="md-person"></Icon>用户管理
       </h2>
       <!-- 搜索框 -->
       <Row :gutter="16">
@@ -79,7 +78,8 @@
         <template slot-scope="{ row }" slot="roleList">
           <!-- {{row.roleList}} -->
           <span v-for="role in row.roleList" :key="role.roleId">
-            {{ role.roleDesc }}<br />
+            {{ role.roleDesc }}
+            <br />
           </span>
         </template>
         <template slot-scope="{ row }" slot="action">
@@ -101,14 +101,15 @@
         </template>
       </Table>
       <!-- 分页 -->
-      <Divider
-        ><Page
+      <Divider>
+        <Page
           :current="curPage"
           :total="total"
           :page-size="pageSize"
           show-total
           @on-change="pageChange"
-      /></Divider>
+        />
+      </Divider>
       <Button type="primary" @click="showRoleEditModal">设置角色</Button>
     </Card>
     <!-- 修改对话框 -->
@@ -177,7 +178,8 @@
           v-for="(label, key) in {
             userName: '昵称',
             userMobile: '手机号',
-            userEmail: '邮箱'
+            userEmail: '邮箱',
+            userAddress: '地址'
           }"
         >
           <FormItem :label="label" :prop="key" :key="key">
@@ -353,6 +355,13 @@ export default {
             trigger: "blur"
           }
         ],
+        userAddress: [
+          {
+            required: true,
+            message: "昵称不能为空",
+            trigger: "blur"
+          }
+        ],
         userBirthday: [
           {
             required: true,
@@ -365,8 +374,20 @@ export default {
             message: "性别不能为空"
           }
         ],
-        userMobile: [{ validator: validateMobile, trigger: "blur" }],
-        userEmail: [{ validator: validateEmail, trigger: "blur" }],
+        userMobile: [
+          {
+            required: true,
+            message: "手机号不能为空"
+          },
+          { validator: validateMobile, trigger: "blur" }
+        ],
+        userEmail: [
+          {
+            required: true,
+            message: "邮箱不能为空"
+          },
+          { validator: validateEmail, trigger: "blur" }
+        ],
         roleList: [
           { required: true, type: "array", min: 1, message: "角色不能为空!" }
         ],
