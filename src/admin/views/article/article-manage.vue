@@ -56,7 +56,7 @@
     </Row>
     <Divider>文章列表</Divider>
     <!-- 表格 -->
-    <Table border :columns="columns" :data="curArticleList">
+    <Table :columns="columns" :data="curArticleList">
       <template slot-scope="{ row }" slot="action">
         <Button
           type="primary"
