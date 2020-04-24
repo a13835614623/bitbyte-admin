@@ -118,9 +118,9 @@ export default {
         {
           color: "cyan",
           tag: "日",
-          icon: "ios-stats",
-          to: "/stats",
-          label: "数据"
+          icon: "md-key",
+          to: "/user/perm-manage",
+          label: "权限"
         },
         {
           color: "green",
@@ -130,13 +130,6 @@ export default {
           label: "文章"
         },
         {
-          color: "orange",
-          tag: "日",
-          icon: "md-chatboxes",
-          to: "/action/article-toplist",
-          label: "互动"
-        },
-        {
           color: "purple",
           tag: "日",
           icon: "md-clipboard",
@@ -144,10 +137,18 @@ export default {
           label: "分区"
         },
         {
+          color: "orange",
+          tag: "日",
+          icon: "md-chatboxes",
+          to: "/action/article-toplist",
+          label: "互动排行"
+        },
+        {
           color: "red",
           tag: "日",
-          icon: "md-checkbox-outline",
-          label: "审核"
+          icon: "md-list",
+          to: "/action/fans-toplist",
+          label: "粉丝排行"
         }
       ],
       // 访问量
