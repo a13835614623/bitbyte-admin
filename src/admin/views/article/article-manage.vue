@@ -34,17 +34,31 @@
         />
       </Col>
       <!-- 发布日期 -->
-      <Col span="8">
+      <Col span="6">
         <DatePicker
           type="datetimerange"
           split-panels
-          style="width:80%;"
+          style="width:100%;"
           v-model="articlePublishTimeRange"
           placeholder="选择发布日期范围"
           clearable
         />
       </Col>
+      <!-- 状态 -->
       <Col span="4">
+        <Select
+          v-model="searchArticle.articleState"
+          clearable
+          placeholder="文章状态"
+        >
+          <template v-for="(label, key) in ARTICLE_STATE_MAP">
+            <Option v-if="typeof label != 'number'" :value="key" :key="key">{{
+              label
+            }}</Option>
+          </template>
+        </Select>
+      </Col>
+      <Col span="2">
         <Button
           type="primary"
           @click="firstSearch"
@@ -84,7 +98,12 @@
 </template>
 
 <script>
-import { ARTICLE_PROP_MAP, ARTICLE_PART_MAP } from "@/utils/util";
+import {
+  ARTICLE_PROP_MAP,
+  ARTICLE_STATE_MAP,
+  ARTICLE_PART_MAP,
+  ARTICLE_VIEW_PRE
+} from "@/utils/util";
 import {
   DO_ADD_ARTICLE,
   GET_ARTICLE_LIST,
@@ -104,7 +123,7 @@ export default {
       title: "#",
       key: "index",
       minWidth: 30,
-      maxWidth: 100
+      maxWidth: 80
     });
     columns.push({
       title: "操作",
@@ -120,7 +139,8 @@ export default {
       pageSize: 10,
       curPage: 1, //当前页码,
       ARTICLE_PROP_MAP,
-      ARTICLE_PART_MAP
+      ARTICLE_PART_MAP,
+      ARTICLE_STATE_MAP
     };
   },
   created() {
@@ -142,6 +162,13 @@ export default {
         article: this.searchArticle,
         articlePublishStart: this.articlePublishTimeRange[0],
         articlePublishEnd: this.articlePublishTimeRange[1],
+        articleStateList: [
+          ARTICLE_STATE_MAP.PASS,
+          ARTICLE_STATE_MAP.REFUSE,
+          ARTICLE_STATE_MAP.CREATED,
+          ARTICLE_STATE_MAP.PUBLISHED,
+          ARTICLE_STATE_MAP.AUDITING
+        ],
         start,
         count: this.pageSize
       });
@@ -150,6 +177,7 @@ export default {
           article.articlePublishTime
         ).format();
         article.articlePart = ARTICLE_PART_MAP[article.articlePart];
+        article.articleState = ARTICLE_STATE_MAP[article.articleState];
         article.index = this.start + index + 1;
         return article;
       });
@@ -160,7 +188,7 @@ export default {
       this.search();
     },
     view(row) {
-      //
+      window.open(ARTICLE_VIEW_PRE + row.articleId, "_blank");
     },
     async remove({ articleId }) {
       this.$Modal.confirm({

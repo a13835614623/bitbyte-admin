@@ -6,13 +6,15 @@
       </h2>
       <!-- 搜索框 -->
       <Row :gutter="16">
-        <Col span="5">
+        <!-- 昵称 -->
+        <Col span="3">
           <Input
             v-model="searchUser.userName"
             placeholder="用户昵称"
             clearable
           />
         </Col>
+        <!-- 性别 -->
         <Col span="2">
           <Select v-model="searchUser.userSex" placeholder="性别">
             <Option v-for="item in USER_SEX_LIST" :value="item" :key="item">{{
@@ -20,7 +22,22 @@
             }}</Option>
           </Select>
         </Col>
-        <Col span="4">
+        <!-- 状态 -->
+        <Col span="3">
+          <Select
+            v-model="searchUser.userState"
+            clearable
+            placeholder="用户状态"
+          >
+            <template v-for="(label, key) in USER_STATE_MAP">
+              <Option v-if="typeof label != 'number'" :value="key" :key="key">{{
+                label
+              }}</Option>
+            </template>
+          </Select>
+        </Col>
+        <!-- 手机号 -->
+        <Col span="3">
           <Input
             v-model="searchUser.userMobile"
             placeholder="手机号"
@@ -254,7 +271,7 @@
 </template>
 
 <script>
-import { USER_PROP_MAP, USER_SEX_LIST } from "@/utils/util";
+import { USER_PROP_MAP, USER_SEX_LIST, USER_STATE_MAP } from "@/utils/util";
 import {
   DO_ADD_USER,
   GET_USER_LIST,
@@ -340,6 +357,7 @@ export default {
       pageSize: 10,
       curPage: 1, //当前页码,
       USER_PROP_MAP,
+      USER_STATE_MAP,
       ruleValidate: {
         userName: [
           {
@@ -443,7 +461,7 @@ export default {
     // 搜索
     async search(start = this.start) {
       let { data, more } = await GET_USER_LIST({
-        user: this.searchUser,
+        user: Object.assign(this.searchUser),
         start,
         count: this.pageSize
       });
@@ -451,6 +469,7 @@ export default {
         user.userBirthday = new Date(user.userBirthday).format("y-m-d");
         user.userPic = this.$USER_PIC_PREFIX + user.userPic;
         user.index = this.start + index + 1;
+        user.userState = USER_STATE_MAP[user.userState];
         user.roleList = user.roleList.map(({ roleDesc, roleId }) => {
           return { roleDesc, roleId };
         });

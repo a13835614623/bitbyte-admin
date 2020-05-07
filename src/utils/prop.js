@@ -39,7 +39,8 @@ const USER_PROP_MAP = Object.assign(
     userBirthday: "生日",
     userAddress: "地址",
     userEmail: "邮箱",
-    userPassword: "密码"
+    userPassword: "密码",
+    userState: "状态"
   },
   RECORD_COMMON_PROP_MAP
 );
@@ -66,7 +67,8 @@ const ARTICLE_PROP_MAP = Object.assign({
   articleRead: "阅读量",
   articlePublishTime: "发布时间",
   articleTags: "标签",
-  articlePart: "分区"
+  articlePart: "分区",
+  articleState: "状态"
   // articleContent: "文章内容",
   // articleMdContent: "文章内容(Markdown)",
 });
@@ -83,11 +85,37 @@ const ACCESS_VALUE_MAP = Object.assign(
   },
   ARTICLE_PART_MAP
 );
-
+// 文章状态
+const ARTICLE_STATE_MAP = {
+  24: "审核通过",
+  25: "审核拒绝",
+  27: "已创建",
+  28: "已发布",
+  29: "审核中",
+  32: "已删除",
+  PASS: 24,
+  REFUSE: 25,
+  CREATED: 27,
+  PUBLISHED: 28,
+  AUDITING: 29,
+  DELETED: 32
+};
+const USER_STATE_MAP = {
+  31: "已锁定",
+  32: "已删除",
+  33: "已封禁",
+  34: "正常",
+  LOCKED: 31,
+  DELETED: 32,
+  BANNED: 33,
+  NORMAL: 34
+};
 const PARTS = Object.values(ARTICLE_PART_MAP);
 export {
   AUDIT_STATE_MAP,
   AUDIT_STATE_INFO,
+  ARTICLE_STATE_MAP,
+  USER_STATE_MAP,
   ARTICLE_PART_INFO,
   ARTICLE_PART_MAP,
   ARTICLE_PROP_MAP,
