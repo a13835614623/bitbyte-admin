@@ -19,6 +19,7 @@ let DO_ADD_USER = async user => {
 };
 // 更新用户
 let DO_UPDATE_USER = async user => {
+  user.userPic=null;
   let { data } = await axios.post(base + "/update", user);
   return data;
 };
