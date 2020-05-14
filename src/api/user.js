@@ -19,13 +19,13 @@ let DO_ADD_USER = async user => {
 };
 // 更新用户
 let DO_UPDATE_USER = async user => {
-  user.userPic=null;
+  user.userPic = null;
   let { data } = await axios.post(base + "/update", user);
   return data;
 };
 // 删除用户
 let DO_DELETE_USER = async userId => {
-  let { data } = await axios.post(base + "/delete/" + userId);
+  let { data } = await axios.post(base + "/delete?userId=" + userId);
   return data;
 };
 // 获取用户列表
