@@ -92,6 +92,9 @@
             style="border-radius:15px;"
           />
         </template>
+        <template slot-scope="{ row }" slot="userState">
+          <span>{{ USER_STATE_MAP[row.userState] }}</span>
+        </template>
         <template slot-scope="{ row }" slot="roleList">
           <!-- {{row.roleList}} -->
           <span v-for="role in row.roleList" :key="role.roleId">
@@ -158,6 +161,15 @@
             <Option v-for="item in USER_SEX_LIST" :value="item" :key="item">{{
               item
             }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="用户状态">
+          <Select v-model="editUser.userState" placeholder="选择状态">
+            <template v-for="(label, key) in USER_STATE_MAP">
+              <Option v-if="typeof label != 'number'" :value="key" :key="key">{{
+                label
+              }}</Option>
+            </template>
           </Select>
         </FormItem>
         <FormItem label="出生日" prop="userBirthday">
@@ -296,8 +308,10 @@ export default {
           title: USER_PROP_MAP[key],
           key
         };
-        if (key == "userPic") {
+        if (key == "userPic" || key == "userState") {
           res.slot = key;
+          res.width = 70;
+        } else if (key == "userSex") {
           res.width = 70;
         }
         return res;
@@ -469,7 +483,7 @@ export default {
         user.userBirthday = new Date(user.userBirthday).format("y-m-d");
         user.userPic = this.$USER_PIC_PREFIX + user.userPic;
         user.index = this.start + index + 1;
-        user.userState = USER_STATE_MAP[user.userState];
+        user.userState = user.userState + "";
         user.roleList = user.roleList.map(({ roleDesc, roleId }) => {
           return { roleDesc, roleId };
         });
@@ -504,7 +518,9 @@ export default {
         async onOk() {
           let { data, status, message } = await DO_DELETE_USER(userId);
           this.$Message[status](message);
-          this.search();
+          setTimeout(() => {
+            this.firstSearch();
+          }, 200);
         }
       });
     },
@@ -520,7 +536,7 @@ export default {
             console.error(error);
           } finally {
             this.loading = false;
-            this.search();
+            this.firstSearch();
           }
         }
       });
